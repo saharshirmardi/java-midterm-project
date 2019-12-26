@@ -87,7 +87,7 @@ public class Main {
             return count;
         }
     }
-    public static void tester(String[] test){
+    public static String tester(String[] test){
         boolean valid = false;
         boolean valid_1 = false;
         boolean valid_2 = false;
@@ -114,10 +114,10 @@ public class Main {
         }
 
         if(!(validity.contains("0"))){
-            System.out.println("Valid");
+            return "Valid";
         }
         else {
-            System.out.println("Invalid");
+            return "Invalid";
         }
     }
 
@@ -278,16 +278,16 @@ public class Main {
         }
     }
 
-    public static void parse2(String s2){
+    public static String parse2(String s2){
 
         s2 = s2.trim().replaceAll("\\s+", "");
         s2 = s2.substring(1, s2.length() - 1);
         String[] test_case;
         test_case = s2.split(",", -1);
-        tester( test_case );
+        return tester( test_case );
     }
 
-    public static void split_input (ArrayList<String> Arr){
+    public static ArrayList<String> split_input (ArrayList<String> Arr){
         int split_index = 0;
         for(int i = 0; i < Arr.size(); i++)
             if (Arr.get(i).equals("#")) {
@@ -296,9 +296,11 @@ public class Main {
             }
         for (int i= 0 ; i<split_index ; i++)
             parse1(Arr.get(i));
+        ArrayList<String> result = new ArrayList<>();
         for (int i = split_index+1; i < Arr.size(); i++)
-            parse2(Arr.get(i));
-        System.out.println("+++");
+            result.add(parse2(Arr.get(i)));
+        result.add("+++");
+        return result;
     }
 
     public static void main(String[] args) {
@@ -308,6 +310,7 @@ public class Main {
         ArrayList<String> list = new ArrayList<String>();
         String tmp = " ";
 
+        ArrayList<String> result = new ArrayList<>();
 
         while(!(tmp.equals("###"))) {
             tmp = myObj.nextLine();
@@ -315,11 +318,13 @@ public class Main {
                 list.add(tmp);
             }
             else {
-                split_input(list);
+                result.addAll(split_input(list));
                 List.nodes.removeAll(List.nodes);
                 list.removeAll(list);
             }
         }
 
+        for (String line : result)
+            System.out.println(line);
     }
 }
