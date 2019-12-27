@@ -10,10 +10,10 @@ public class Main {
                 Node parent = null;
                 String name = "";
                 boolean used = false;
-                public static  ArrayList<Node> or_child = new ArrayList<Node>();
-                public static ArrayList<Node> xor_child = new ArrayList<Node>();
-                public static ArrayList<Node> mand_child = new ArrayList<Node>();
-                public static ArrayList<Node> opt_child = new ArrayList<Node>();
+                public ArrayList<Node> or_child = new ArrayList<Node>();
+                public ArrayList<Node> xor_child = new ArrayList<Node>();
+                public ArrayList<Node> mand_child = new ArrayList<Node>();
+                public ArrayList<Node> opt_child = new ArrayList<Node>();
         }
 
         static class List{
