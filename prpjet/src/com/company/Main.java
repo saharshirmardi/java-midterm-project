@@ -37,14 +37,19 @@ public class Main {
         public static void parse1(String s1) {
                 s1= s1.trim().replaceAll("\\s+", "");
                 String parent, children;
-                int split_index = 0;
-                for(int i = 0; i < s1.length(); i++)
-                        if (s1.charAt(i)=='=') {
-                                split_index = i;
-                                break;
-                        }
-                parent = s1.substring(0,split_index);
-                children = s1.substring(split_index+1,s1.length());
+                if (s1.contains("=")) {
+                        int split_index = 0;
+                        for(int i = 0; i < s1.length(); i++)
+                                if (s1.charAt(i)=='=') {
+                                        split_index = i;
+                                        break;
+                                }
+                        parent = s1.substring(0,split_index);
+                        children = s1.substring(split_index+1,s1.length());
+                } else {
+                        parent = s1;
+                        children = "";
+                }
                 Node P = new Node();
                 if (List.nodes.size() == 0) {
                         P.name = parent;
@@ -152,7 +157,7 @@ public class Main {
                         }
                 }
 
-                else {
+                else if (children.length() > 0) {
                         boolean defined = false;
                         for (int i = 0; i < List.nodes.size(); i++) {
                                 if (List.nodes.get(i).name.equals(children)) {
@@ -199,30 +204,35 @@ public class Main {
         }
 
         public static void check(String[] test) {
-                boolean invalid = false;
-                for (int i = 0; i < test.length; i++)
-                        for (int j = 0; j < List.nodes.size(); j++)
+                boolean valid = (test.length > 0);
+                for (int i = 0; i < test.length; i++) {
+                        boolean occurs = false;
+                        for (int j = 0; j < List.nodes.size(); j++) {
                                 if (test[i].equals(List.nodes.get(j).name)) {
                                         List.nodes.get(j).used = true;
+                                        occurs = true;
                                         break;
                                 }
-
-                for (int i = 0; i < List.nodes.size(); i++) {
-                        if (List.nodes.get(i).used == true) {
-                                check_par(List.nodes.get(i));
-                                check_mand(List.nodes.get(i));
-                                check_or(List.nodes.get(i));
-                                check_xor(List.nodes.get(i));
                         }
-                        if (!(check_par(List.nodes.get(i)) && check_mand(List.nodes.get(i)) && check_or(List.nodes.get(i)) && check_xor(List.nodes.get(i)))) {
-                                invalid = true;
-                                break;
-                        }
+                        valid &= occurs;
                 }
-                if (invalid)
-                        List.ans.add("Invalid");
-                else
+
+                if (valid)
+                        for (int i = 0; i < List.nodes.size(); i++) {
+                                Node node = List.nodes.get(i);
+                                if (node.used == true) {
+                                        boolean par = check_par(node);
+                                        boolean mand = check_mand(node);
+                                        boolean or = check_or(node);
+                                        boolean xor = check_xor(node);
+                                        valid &= par && mand && or && xor;
+                                }
+                        }
+
+                if (valid)
                         List.ans.add("Valid");
+                else
+                        List.ans.add("Invalid");
         }
 
         public static boolean check_par(Node p) {
